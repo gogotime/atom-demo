@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased;
+    background: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0f 50%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           rounded-lg bg-gradient-to-r from-purple-600 to-blue-600
+           text-white font-medium hover:from-purple-500 hover:to-blue-500
+           transition shadow-lg shadow-purple-900/30;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800
+           hover:text-white transition;
+  }
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-1.5
+           rounded-md text-red-400 hover:bg-red-500/10 transition text-sm;
+  }
+  .input {
+    @apply w-full px-4 py-2.5 rounded-lg bg-bg-card border border-slate-700
+           text-slate-100 placeholder-slate-500 focus:outline-none
+           focus:border-purple-500 transition;
+  }
+  .card {
+    @apply bg-bg-card/70 backdrop-blur border border-slate-800 rounded-xl;
+  }
+}
+
+/* Markdown styles for agent messages */
+.md-body {
+  @apply text-sm leading-relaxed text-slate-200;
+}
+.md-body p { @apply mb-2 last:mb-0; }
+.md-body ul { @apply list-disc list-inside mb-2 space-y-0.5; }
+.md-body ol { @apply list-decimal list-inside mb-2 space-y-0.5; }
+.md-body strong { @apply text-white font-semibold; }
+.md-body code { @apply bg-slate-800 px-1 py-0.5 rounded text-purple-300 text-xs font-mono; }
+.md-body pre { @apply bg-slate-900 border border-slate-800 rounded p-2 my-2 overflow-x-auto text-xs font-mono; }
+.md-body pre code { @apply bg-transparent p-0 text-slate-200; }
+.md-body h1, .md-body h2, .md-body h3 { @apply font-semibold text-white mt-2 mb-1; }
+.md-body h1 { @apply text-base; }
+.md-body h2 { @apply text-sm; }
+.md-body h3 { @apply text-sm; }
+
+/* Pulse animation for streaming agent */
+@keyframes agentPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.agent-pulse { animation: agentPulse 1.2s ease-in-out infinite; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2d2d3a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #3d3d4a; }

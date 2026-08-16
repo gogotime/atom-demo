@@ -1,0 +1,43 @@
+# Secrets & local config
+backend/.env
+.env
+.env.local
+frontend/.env
+frontend/.env.local
+
+# Runtime data (SQLite + generated projects)
+data/
+backend/data/
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+
+# Frontend build artifacts & deps
+frontend/node_modules/
+frontend/dist/
+backend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.bak
+
+# Build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Local cross-compiled binaries
+atoms-demo
+atoms-demo-linux
+atoms-demo.exe
