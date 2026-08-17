@@ -54,7 +54,7 @@ export default function Preview({ html }) {
             ref={iframeRef}
             title="preview"
             srcDoc={srcdoc}
-            sandbox="allow-scripts"
+            sandbox="allow-scripts allow-forms allow-modals"
             className="w-full h-full block"
             style={{ border: 0, background: 'white' }}
           />

@@ -16,6 +16,7 @@ export default function Builder({ user }) {
   const [nameEditing, setNameEditing] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
   const [publishedLink, setPublishedLink] = useState(null);
+  const [copyState, setCopyState] = useState('idle'); // 'idle' | 'copied' | 'error'
   const codeRef = useRef('');
   const generatingRef = useRef(false);
   const toolNameRef = useRef('');
@@ -229,7 +230,39 @@ export default function Builder({ user }) {
 
   const copyLink = async () => {
     if (!publishedLink) return;
-    try { await navigator.clipboard.writeText(publishedLink); } catch {}
+    const text = publishedLink;
+
+    // Modern path: navigator.clipboard requires a secure context (HTTPS or localhost).
+    // Our deployment runs on plain HTTP, so this throws NotAllowedError on http://IP.
+    const writeViaClipboardApi = async () => {
+      if (!navigator.clipboard || !window.isSecureContext) return false;
+      await navigator.clipboard.writeText(text);
+      return true;
+    };
+
+    // Fallback: hidden textarea + execCommand('copy'). Works on HTTP across browsers.
+    const writeViaExecCommand = () => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch {}
+      document.body.removeChild(ta);
+      return ok;
+    };
+
+    let ok = false;
+    try { ok = await writeViaClipboardApi(); } catch {}
+    if (!ok) ok = writeViaExecCommand();
+
+    setCopyState(ok ? 'copied' : 'error');
+    setTimeout(() => setCopyState('idle'), 1500);
   };
 
   return (
@@ -265,7 +298,9 @@ export default function Builder({ user }) {
               <code className="hidden md:block text-xs text-slate-400 bg-bg-card px-2 py-1 rounded max-w-[180px] truncate">
                 {publishedLink}
               </code>
-              <button onClick={copyLink} className="btn-ghost text-xs">Copy link</button>
+              <button onClick={copyLink} className="btn-ghost text-xs" title={copyState === 'error' ? 'Copy failed — select the link manually' : ''}>
+                {copyState === 'copied' ? '✓ Copied' : copyState === 'error' ? 'Copy failed' : 'Copy link'}
+              </button>
             </>
           )}
           <button onClick={togglePublish} className={project.is_published ? 'btn-ghost text-xs' : 'btn-primary text-xs'}>

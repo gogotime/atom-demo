@@ -55,7 +55,7 @@ export default function Public() {
         <iframe
           title={data.name ? String(data.name).slice(0, 200) : 'Published app'}
           srcDoc={fullHtml}
-          sandbox="allow-scripts"
+          sandbox="allow-scripts allow-forms allow-modals"
           referrerPolicy="no-referrer"
           loading="lazy"
           className="w-full h-full block"
